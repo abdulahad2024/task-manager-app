@@ -1,15 +1,24 @@
-import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
 
-import 'app/routes/app_pages.dart';
 
-void main() {
+import 'export.dart';
+
+
+void main() async {
+
+  await AppInitService.initialize();
+
+
   runApp(
     GetMaterialApp(
-      title: "Application",
+      title: AppConfig.appName,
+      debugShowCheckedModeBanner: false,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      theme: ThemeData(brightness: Brightness.light, useMaterial3: true),
+      darkTheme: ThemeData(brightness: Brightness.dark, useMaterial3: true),
+      builder: AppInitService.themeBuilder,
+      themeMode: ThemeMode.system,
     ),
   );
 }
