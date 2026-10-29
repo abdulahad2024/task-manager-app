@@ -41,7 +41,8 @@ class HomeView extends GetView<HomeController> {
                       title: "Design Landing Page Header $index",
                       subtitle: "Create a clean, responsive header section with logo, navigation links, and a clear call-to-action button.",
                       onTap: () {
-                        Get.toNamed(Routes.TASK_DETAILS);
+
+                        Get.toNamed('${Routes.TASK}${Routes.TASK_DETAILS}');
                       },
                     );
                   },

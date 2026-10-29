@@ -6,8 +6,7 @@ import 'export.dart';
 
 void main() async {
 
-  await AppInitService.initialize();
-
+  await AppInitService.initAndRunApp();
 
   runApp(
     GetMaterialApp(

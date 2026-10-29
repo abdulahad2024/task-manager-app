@@ -1,3 +1,4 @@
+import 'package:task_masenger_app/app/data/local/local_auth_storage.dart';
 import 'package:task_masenger_app/export.dart';
 
 class OnboardingController extends GetxController {
@@ -30,16 +31,6 @@ class OnboardingController extends GetxController {
     currentIndex.value = index;
   }
 
-  void nextPage() {
-    if (!isLastPage) {
-      pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      Get.offAllNamed(Routes.LOGIN);
-    }
-  }
 
   void previousPage() {
     if (currentIndex.value > 0) {
@@ -50,9 +41,37 @@ class OnboardingController extends GetxController {
     }
   }
 
-  void skipPage() {
-    Get.offAllNamed(Routes.LOGIN);
+  void nextPage() async {
+    if (!isLastPage) {
+      pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      // অনবোর্ডিং শেষ, স্টোরেজে ফ্ল্যাগ সেভ করা হলো
+      final storage = LocalAuthStorage();
+      await storage.setOnboardingSeen();
+
+      // যদি ইউজার ইতিমধ্যে লগইন করা থাকে তবে হোম পেজে যাবে, না হলে লগইন পেজে
+      if (storage.isLoggedIn) {
+        Get.offAllNamed(Routes.BOTTOM_NAV);
+      } else {
+        Get.offAllNamed(Routes.LOGIN);
+      }
+    }
   }
+
+  void skipPage() async {
+    final storage = LocalAuthStorage();
+    await storage.setOnboardingSeen();
+
+    if (storage.isLoggedIn) {
+      Get.offAllNamed(Routes.BOTTOM_NAV);
+    } else {
+      Get.offAllNamed(Routes.LOGIN);
+    }
+  }
+
 
   @override
   void onClose() {

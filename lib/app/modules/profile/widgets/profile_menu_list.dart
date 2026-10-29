@@ -24,7 +24,8 @@ class ProfileMenuList extends StatelessWidget {
             icon: Ionicons.personOutline,
             title: AppString.myProfile,
             onTap: () {
-              Get.toNamed('${Routes.PROFILE}${Routes.MY_PROFILE}');            },
+              Get.toNamed(Routes.MY_PROFILE);
+              },
           ),
           const SizedBox(height: 12),
           ProfileCard(

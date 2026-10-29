@@ -36,7 +36,7 @@ class MyProfileView extends GetView<MyProfileController> {
                   child: InkWell(
                     customBorder: const CircleBorder(),
                     onTap: () {
-                      Get.toNamed('${Routes.PROFILE}${Routes.EDIT_PROFILE}');                    },
+                      Get.toNamed(Routes.EDIT_PROFILE);                    },
                     child: const SizedBox(
                       width: 42,
                       height: 42,

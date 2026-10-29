@@ -171,7 +171,8 @@ class TaskDetailsView extends GetView<TaskDetailsController> {
                             borderColor: AppColor.primaryColor,
                             textColor: AppColor.primaryColor,
                             onTap: () {
-                              Get.toNamed(Routes.EDIT_TASK);
+                              Get.toNamed('${Routes.TASK}${Routes.EDIT_TASK}');
+
                             },
                           ),
                         ),

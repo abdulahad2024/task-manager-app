@@ -14,7 +14,7 @@ export 'package:task_masenger_app/app/modules/onboarding/widgets/onboarding_data
 export 'package:task_masenger_app/app/modules/onboarding/widgets/onboarding_dot_indicator.dart';
 export 'package:flutter/services.dart';
 export 'package:task_masenger_app/app/core/constants/config/app_config.dart';
-export 'package:task_masenger_app/app/core/utils/app_services/app_init_service.dart';
+export 'package:task_masenger_app/app/core/utils/app_init/app_init_service.dart';
 export 'package:task_masenger_app/app/common/widgets/common_widgets/custom_checkbox.dart';
 export 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text_feild.dart';
 export 'package:task_masenger_app/app/modules/authentication/widgets/auth_action_text.dart';

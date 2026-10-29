@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_button.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_otp_field.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text.dart';
 import 'package:task_masenger_app/app/core/constants/string/app_string.dart';
-import 'package:task_masenger_app/app/routes/app_pages.dart';
 
 import '../controllers/verify_code_controller.dart';
 
@@ -40,7 +38,6 @@ class VerifyCodeView extends GetView<VerifyCodeController> {
                       ),
                       const SizedBox(height: 8),
 
-
                       CustomText(
                         text: AppString.verifyOtpSubtitle,
                         color: theme.textTheme.bodyMedium?.color,
@@ -49,37 +46,34 @@ class VerifyCodeView extends GetView<VerifyCodeController> {
 
                       const SizedBox(height: 8),
 
-
                       CustomText(
-                        text: "michelle.rivera@example.com",
-                        color: theme.textTheme.bodyMedium?.color,
+                        text: controller.email.isNotEmpty
+                            ? controller.email
+                            : "email@example.com",
+                        color: theme.primaryColor,
                         fontSize: 14,
+                        fontWeight: FontWeight.bold,
                       ),
 
                       const SizedBox(height: 32),
-
 
                       CustomOtpField(
                         length: 6,
                         boxSize: 45.0,
                         onChanged: (value) {
-                          print("OTP Value: $value");
+                          controller.onOtpChanged(value);
                         },
                       ),
 
-
-
-
-
                       const SizedBox(height: 40),
 
-
-
-                      CustomButton(
+                      Obx(() => CustomButton(
                         text: AppString.confirm,
+                        isLoading: controller.isLoading.value,
                         onPressed: () {
-                          Get.toNamed(Routes.SET_PASSWORD);
+                          controller.verifyEmail(context);
                         },
+                      ),
                       ),
 
                       const SizedBox(height: 20),

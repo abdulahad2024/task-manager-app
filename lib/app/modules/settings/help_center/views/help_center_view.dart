@@ -18,9 +18,7 @@ class HelpCenterView extends GetView<HelpCenterController> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-
       appBar: const CommonAppBar(title: AppString.faqTitle),
-
       body: SafeArea(
         child: ListView(
           physics: const BouncingScrollPhysics(),
@@ -47,34 +45,39 @@ class HelpCenterView extends GetView<HelpCenterController> {
                     ),
                   ],
                 ),
-                child: Theme(
-                  data: theme.copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    tilePadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 4,
-                    ),
-                    childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                    title: CustomText(
-                      text: faq['question'] ?? '',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: isDark ? Colors.white : Colors.black87,
-                    ),
-                    iconColor: AppColor.primaryColor,
-                    collapsedIconColor: AppColor.primaryColor,
-                    children: [
-                      const Divider(height: 1, color: Colors.black12),
-                      const SizedBox(height: 12),
-                      CustomText(
-                        text: faq['answer'] ?? '',
-                        fontSize: 13.5,
-                        color: isDark
-                            ? Colors.white60
-                            : AppColor.secondaryTextColor,
-                        height: 1.5,
+                child: Material(
+                  // 👈 এখানে Material উইজেট যোগ করা হয়েছে যাতে ওয়ার্নিং না আসে
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(16),
+                  child: Theme(
+                    data: theme.copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      tilePadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
                       ),
-                    ],
+                      childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      title: CustomText(
+                        text: faq['question'] ?? '',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? Colors.white : Colors.black87,
+                      ),
+                      iconColor: AppColor.primaryColor,
+                      collapsedIconColor: AppColor.primaryColor,
+                      children: [
+                        const Divider(height: 1, color: Colors.black12),
+                        const SizedBox(height: 12),
+                        CustomText(
+                          text: faq['answer'] ?? '',
+                          fontSize: 13.5,
+                          color: isDark
+                              ? Colors.white60
+                              : AppColor.secondaryTextColor,
+                          height: 1.5,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -118,7 +121,6 @@ class HelpCenterView extends GetView<HelpCenterController> {
                     ),
                   ),
                   const SizedBox(width: 16),
-
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +133,8 @@ class HelpCenterView extends GetView<HelpCenterController> {
                         ),
                         const SizedBox(height: 4),
                         CustomText(
-                          text: "Our help desk is available 24/7 to support your workflow.",
+                          text:
+                          "Our help desk is available 24/7 to support your workflow.",
                           fontSize: 12,
                           color: isDark
                               ? Colors.white60

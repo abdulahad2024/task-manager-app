@@ -5,6 +5,8 @@ class AppConfig {
   static const String appName = 'Task Manager App';
   static const String appTagline = 'Manage Everything in One Place';
 
+  static const String domain = "http://192.168.0.105:5000";
+
 
   static const String tokenKey = 'auth_token';
   static const String userKey = 'user_data';
