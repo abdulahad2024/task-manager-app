@@ -4,6 +4,8 @@ import '../../../core/constants/color/app_color.dart';
 import 'custom_button.dart';
 import 'custom_text.dart';
 
+enum DialogType { success, warning, error }
+
 class CustomDialog {
   static void show({
     required BuildContext context,
@@ -11,21 +13,53 @@ class CustomDialog {
     required String message,
     required String confirmText,
     required VoidCallback onConfirm,
-    bool isError = false,
+    DialogType dialogType = DialogType.success,
+    String cancelText = 'Cancel',
+    bool showCancelButton = false,
+    VoidCallback? onCancel,
   }) {
+    IconData iconData;
+    Color iconColor;
+    Color buttonColor;
+
+    switch (dialogType) {
+      case DialogType.success:
+        iconData = Ionicons.checkmarkCircle;
+        iconColor = AppColor.primaryColor;
+        buttonColor = AppColor.primaryColor;
+        break;
+      case DialogType.warning:
+        iconData = Icons.warning_amber_rounded;
+        iconColor = AppColor.warningColor;
+        buttonColor = AppColor.primaryColor;
+        break;
+      case DialogType.error:
+        iconData = Icons.error_outline_rounded;
+        iconColor = AppColor.errorColor;
+        buttonColor = AppColor.primaryColor;
+        break;
+    }
+
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
         title: Column(
           children: [
             Icon(
-              isError ? Icons.warning_amber_rounded : Ionicons.checkmark,
-              size: 48,
-              color: isError ? AppColor.errorColor : AppColor.warningColor,
+              iconData,
+              size: 56,
+              color: iconColor,
             ),
-            const SizedBox(height: 10),
-            CustomText(text: title, fontSize: 20, fontWeight: FontWeight.bold),
+            const SizedBox(height: 12),
+            CustomText(
+              text: title,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
         content: CustomText(
@@ -36,21 +70,50 @@ class CustomDialog {
         ),
         actionsAlignment: MainAxisAlignment.spaceEvenly,
         actions: [
-          // TextButton(
-          //   onPressed: () => Navigator.pop(context),
-          //   child: const CustomText(text: 'Cancel', color: AppColor.secondaryTextColor),
-          // ),
-          SizedBox(
-            width: 120,
-            height: 40,
-            child: CustomButton(
-              text: confirmText,
-              backgroundColor: isError ? AppColor.errorColor : AppColor.primaryColor,
-              onPressed: () {
-                Navigator.pop(context);
-                onConfirm();
-              },
-            ),
+          Row(
+            children: [
+              // Cancel Button (আউটলাইন স্টাইল)
+              if (showCancelButton) ...[
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (onCancel != null) onCancel();
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: AppColor.primaryColor, width: 1.2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: CustomText(
+                        text: cancelText,
+                        color: AppColor.primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+              ],
+
+              // Confirm Button
+              Expanded(
+                child: SizedBox(
+                  height: 44,
+                  child: CustomButton(
+                    text: confirmText,
+                    backgroundColor: buttonColor,
+                    onPressed: () {
+                      Navigator.pop(context);
+                      onConfirm();
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

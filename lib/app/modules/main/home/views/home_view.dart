@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text.dart';
+import 'package:task_masenger_app/app/routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/home_header.dart';
 import '../widgets/home_task_card.dart';
@@ -39,7 +40,9 @@ class HomeView extends GetView<HomeController> {
                     return HomeTaskCard(
                       title: "Design Landing Page Header $index",
                       subtitle: "Create a clean, responsive header section with logo, navigation links, and a clear call-to-action button.",
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(Routes.TASK_DETAILS);
+                      },
                     );
                   },
                 ),

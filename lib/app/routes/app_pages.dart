@@ -20,22 +20,35 @@ import '../modules/profile/change_password/bindings/change_password_binding.dart
 import '../modules/profile/change_password/views/change_password_view.dart';
 import '../modules/profile/edit_profile/bindings/edit_profile_binding.dart';
 import '../modules/profile/edit_profile/views/edit_profile_view.dart';
+import '../modules/profile/my_profile/bindings/my_profile_binding.dart';
+import '../modules/profile/my_profile/views/my_profile_view.dart';
 import '../modules/profile/profile/bindings/profile_binding.dart';
 import '../modules/profile/profile/views/profile_view.dart';
+import '../modules/settings/account_settings/bindings/account_settings_binding.dart';
+import '../modules/settings/account_settings/views/account_settings_view.dart';
+import '../modules/settings/help_center/bindings/help_center_binding.dart';
+import '../modules/settings/help_center/views/help_center_view.dart';
+import '../modules/settings/privacy_policy/bindings/privacy_policy_binding.dart';
+import '../modules/settings/privacy_policy/views/privacy_policy_view.dart';
+import '../modules/settings/tearms_condition/bindings/tearms_condition_binding.dart';
+import '../modules/settings/tearms_condition/views/tearms_condition_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/task/add_task/bindings/add_task_binding.dart';
 import '../modules/task/add_task/views/add_task_view.dart';
+import '../modules/task/edit_task/bindings/edit_task_binding.dart';
+import '../modules/task/edit_task/views/edit_task_view.dart';
 import '../modules/task/task/bindings/task_binding.dart';
 import '../modules/task/task/views/task_view.dart';
+import '../modules/task/task_details/bindings/task_details_binding.dart';
+import '../modules/task/task_details/views/task_details_view.dart';
 
 part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
 
-  static const INITIAL =
-      Routes.SPLASH; // আপনার প্রজেক্ট অনুযায়ী স্প্ল্যাশ বা হোম রাখতে পারেন
+  static const INITIAL = Routes.SPLASH;
 
   static final routes = [
     GetPage(
@@ -73,23 +86,29 @@ class AppPages {
       page: () => const SetPasswordView(),
       binding: SetPasswordBinding(),
     ),
+
+    // ── Profile সম্পর্কিত সকল রুট মেইন লিস্টে রাখা হলো ──
     GetPage(
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
-      children: [
-        GetPage(
-          name: _Paths.EDIT_PROFILE,
-          page: () => const EditProfileView(),
-          binding: EditProfileBinding(),
-        ),
-        GetPage(
-          name: _Paths.CHANGE_PASSWORD,
-          page: () => const ChangePasswordView(),
-          binding: ChangePasswordBinding(),
-        ),
-      ],
     ),
+    GetPage(
+      name: _Paths.EDIT_PROFILE,
+      page: () => const EditProfileView(),
+      binding: EditProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.MY_PROFILE,
+      page: () => const MyProfileView(),
+      binding: MyProfileBinding(),
+    ),
+
     GetPage(
       name: _Paths.BOTTOM_NAV,
       page: () => const BottomNavView(),
@@ -109,6 +128,38 @@ class AppPages {
       name: _Paths.TASK,
       page: () => const TaskView(),
       binding: TaskBinding(),
+      children: [
+        GetPage(
+          name: _Paths.EDIT_TASK,
+          page: () => const EditTaskView(),
+          binding: EditTaskBinding(),
+        ),
+        GetPage(
+          name: _Paths.TASK_DETAILS,
+          page: () => const TaskDetailsView(),
+          binding: TaskDetailsBinding(),
+        ),
+      ],
+    ),
+    GetPage(
+      name: _Paths.TEARMS_CONDITION,
+      page: () => const TermsConditionView(),
+      binding: TearmsConditionBinding(),
+    ),
+    GetPage(
+      name: _Paths.HELP_CENTER,
+      page: () => const HelpCenterView(),
+      binding: HelpCenterBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRIVACY_POLICY,
+      page: () => const PrivacyPolicyView(),
+      binding: PrivacyPolicyBinding(),
+    ),
+    GetPage(
+      name: _Paths.ACCOUNT_SETTINGS,
+      page: () => const AccountSettingsView(),
+      binding: AccountSettingsBinding(),
     ),
   ];
 }

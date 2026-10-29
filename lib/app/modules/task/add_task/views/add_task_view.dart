@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_button.dart';
+import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_dialog.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text_feild.dart';
 import 'package:task_masenger_app/app/core/constants/color/app_color.dart';
@@ -15,8 +16,10 @@ class AddTaskView extends GetView<AddTaskController> {
 
   @override
   Widget build(BuildContext context) {
+    final BottomNavController bottomNavController = Get.put(
+      BottomNavController(),
+    );
 
-    final BottomNavController bottomNavController = Get.put(BottomNavController());
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +93,18 @@ class AddTaskView extends GetView<AddTaskController> {
 
               SizedBox(height: 20),
 
-              CustomButton(text: "Save Task", onPressed: () {}),
+              CustomButton(
+                text: "Save Task",
+                onPressed: () {
+                  CustomDialog.show(
+                    context: context,
+                    title: "Success",
+                    message: 'The task has been updated successfully.',
+                    confirmText: "OK",
+                    onConfirm: () {},
+                  );
+                },
+              ),
             ],
           ),
         ),
