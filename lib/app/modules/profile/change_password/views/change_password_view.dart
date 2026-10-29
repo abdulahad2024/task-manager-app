@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_button.dart';
-import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_dialog.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text_feild.dart';
 import 'package:task_masenger_app/app/core/constants/color/app_color.dart';
 import 'package:task_masenger_app/app/core/constants/string/app_string.dart';
-
 import '../controllers/change_password_controller.dart';
 
 class ChangePasswordView extends GetView<ChangePasswordController> {
@@ -15,9 +12,10 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
 
   @override
   Widget build(BuildContext context) {
-
-
+    // কন্ট্রোলার ইনিশিয়ালাইজ করা নিশ্চিত করুন (যদি বাইন্ডিংস না করা থাকে)
+    final controller = Get.put(ChangePasswordController());
     final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -30,7 +28,7 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
           padding: const EdgeInsets.only(left: 12),
           child: Center(
             child: Card(
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
               child: Material(
                 color: AppColor.softColor,
                 shape: const CircleBorder(
@@ -38,10 +36,8 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
                 ),
                 child: InkWell(
                   customBorder: const CircleBorder(),
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: SizedBox(
+                  onTap: () => Get.back(),
+                  child: const SizedBox(
                     width: 42,
                     height: 42,
                     child: Icon(
@@ -55,13 +51,11 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
             ),
           ),
         ),
-
         title: CustomText(
           text: 'Change Password',
           fontSize: theme.textTheme.titleLarge?.fontSize,
           fontWeight: FontWeight.w500,
         ),
-
         centerTitle: true,
       ),
       body: SafeArea(
@@ -69,54 +63,46 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
+              // বর্তমান পাসওয়ার্ড ফিল্ড
               CustomTextFromField(
-                label: "Type Password",
-                hint:  AppString.hintPassword,
+                controller: controller.currentPasswordController,
+                label: "Current Password",
+                hint: AppString.hintPassword,
                 keyboardType: TextInputType.visiblePassword,
                 isPassword: true,
-                onChanged: (value) {
-                  print(value);
-                },
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
+              // নতুন পাসওয়ার্ড ফিল্ড
               CustomTextFromField(
-                label: "New password",
-                hint:  AppString.hintPassword,
+                controller: controller.newPasswordController,
+                label: "New Password",
+                hint: AppString.hintPassword,
                 keyboardType: TextInputType.visiblePassword,
                 isPassword: true,
-                onChanged: (value) {
-                  print(value);
-                },
               ),
 
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
+              // নতুন কনফার্ম পাসওয়ার্ড ফিল্ড
               CustomTextFromField(
-                label: "New Confirm password",
-                hint:  AppString.hintPassword,
+                controller: controller.confirmPasswordController,
+                label: "Confirm New Password",
+                hint: AppString.hintPassword,
                 keyboardType: TextInputType.visiblePassword,
                 isPassword: true,
-                onChanged: (value) {
-                  print(value);
-                },
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-              CustomButton(
-                text: "Update",
-                onPressed: () {
-                  CustomDialog.show(
-                    context: context,
-                    title: "Success",
-                    message: 'Your password has been updated successfully.',
-                    confirmText: "OK",
-                    onConfirm: () {},
-                  );
-                },
-              ),
+              // আপডেট বাটন (Obx দিয়ে লোডিং হ্যান্ডেল করা হয়েছে)
+              Obx(() => CustomButton(
+                text: controller.isLoading.value ? "Updating..." : "Update",
+                onPressed: controller.isLoading.value
+                    ? () {}
+                    : () => controller.changePassword(context),
+              )),
             ],
           ),
         ),

@@ -30,7 +30,6 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // যদি আগে Remember Me করা থাকে, তবে সেভ করা ইমেইলটি ফিল্ডে বসিয়ে দেওয়া যেতে পারে
     String? rememberedEmail = _storage.getRememberedEmail();
     if (rememberedEmail != null && rememberedEmail.isNotEmpty) {
       emailController.text = rememberedEmail;
@@ -38,16 +37,13 @@ class LoginController extends GetxController {
     }
   }
 
-  @override
-  void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.onClose();
+  // Password Visibility Toggle Method
+  void togglePasswordVisibility() {
+    isPasswordObscure.value = !isPasswordObscure.value;
   }
 
   // Login API Call
   Future<void> loginUser(BuildContext context) async {
-    // ফর্ম ভ্যালিডেশন চেক
     if (!loginFormKey.currentState!.validate()) {
       return;
     }
@@ -59,7 +55,6 @@ class LoginController extends GetxController {
         print("🚀 [LoginController] Sending Login Request... Email: ${emailController.text.trim()}");
       }
 
-      // AuthServices থেকে login মেথড কল করা
       final response = await _authServices.login(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
@@ -71,7 +66,6 @@ class LoginController extends GetxController {
         print("✅ [LoginController] Login Successful! Response -> $response");
       }
 
-      // টোকেন এবং ইউজার ডেটা লোকাল স্টোরেজে সেভ করা
       await _storage.saveAccessToken(response['accessToken'] ?? '');
       if (response['refreshToken'] != null) {
         await _storage.saveRefreshToken(response['refreshToken']);
@@ -80,14 +74,12 @@ class LoginController extends GetxController {
         await _storage.saveUserData(response['user']);
       }
 
-      // Remember Me চেক করা থাকলে ইমেইল সেভ করে রাখা
       if (isRememberMe.value) {
         _storage.saveRememberedEmail(emailController.text.trim());
       } else {
         _storage.clearRememberedEmail();
       }
 
-      // Success Message
       CustomSnackBar.show(
         context,
         title: "Success!",
@@ -95,7 +87,6 @@ class LoginController extends GetxController {
         isError: false,
       );
 
-      // ড্যাশবোর্ড বা হোম পেজে রিডাইরেক্ট করা
       Get.offAllNamed(Routes.BOTTOM_NAV);
 
     } catch (e) {

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:motion_tab_bar_v2/motion-tab-controller.dart';
 
-class BottomNavController extends GetxController with GetTickerProviderStateMixin {
-  late MotionTabBarController motionTabBarController;
+class BottomNavController extends GetxController
+    with GetSingleTickerProviderStateMixin {
+  late final MotionTabBarController motionTabBarController;
+
+  final RxInt selectedIndex = 0.obs;
 
   @override
   void onInit() {
@@ -15,22 +18,19 @@ class BottomNavController extends GetxController with GetTickerProviderStateMixi
     );
   }
 
+  void changeTab(int index) {
+    if (index < 0 || index >= motionTabBarController.length) return;
+    selectedIndex.value = index;
+    if (motionTabBarController.index != index) {
+      motionTabBarController.animateTo(index);
+    }
+  }
+
+  void goToHome() => changeTab(0);
+
   @override
   void onClose() {
     motionTabBarController.dispose();
     super.onClose();
   }
-
-  final RxInt selectedIndex = 0.obs;
-
-  void changeTab(int index) {
-    selectedIndex.value = index;
-    motionTabBarController.index = index;
-  }
-
-  void goToHome() {
-    selectedIndex.value = 0;
-  }
-
-
 }

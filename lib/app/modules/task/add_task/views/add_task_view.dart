@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_button.dart';
-import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_dialog.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text_feild.dart';
 import 'package:task_masenger_app/app/core/constants/color/app_color.dart';
 import 'package:task_masenger_app/app/modules/main/bottom_nav/controllers/bottom_nav_controller.dart';
-import 'package:task_masenger_app/app/routes/app_pages.dart';
-
 import '../controllers/add_task_controller.dart';
 
 class AddTaskView extends GetView<AddTaskController> {
@@ -16,11 +12,14 @@ class AddTaskView extends GetView<AddTaskController> {
 
   @override
   Widget build(BuildContext context) {
-    final BottomNavController bottomNavController = Get.put(
-      BottomNavController(),
-    );
+    final controller = Get.put(AddTaskController());
+
+    final BottomNavController bottomNavController = Get.isRegistered<BottomNavController>()
+        ? Get.find<BottomNavController>()
+        : Get.put(BottomNavController());
 
     final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -33,7 +32,7 @@ class AddTaskView extends GetView<AddTaskController> {
           padding: const EdgeInsets.only(left: 12),
           child: Center(
             child: Card(
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
               child: Material(
                 color: AppColor.softColor,
                 shape: const CircleBorder(
@@ -44,7 +43,7 @@ class AddTaskView extends GetView<AddTaskController> {
                   onTap: () {
                     bottomNavController.goToHome();
                   },
-                  child: SizedBox(
+                  child: const SizedBox(
                     width: 42,
                     height: 42,
                     child: Icon(
@@ -58,54 +57,46 @@ class AddTaskView extends GetView<AddTaskController> {
             ),
           ),
         ),
-
         title: CustomText(
           text: 'Add Task',
           fontSize: theme.textTheme.titleLarge?.fontSize,
           fontWeight: FontWeight.w500,
         ),
-
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              CustomTextFromField(
-                label: "Task Title",
-                hint: "e.g. Design Landing Page Header",
-                onChanged: (value) {
-                  print(value);
-                },
-              ),
-
-              SizedBox(height: 15),
-
-              CustomTextFromField(
-                label: "Description",
-                hint: "e.g. Include logo, navigation, and CTA button with brand color",
-                maxLines: 3,
-                onChanged: (value) {
-                  print(value);
-                },
-              ),
-
-              SizedBox(height: 20),
-
-              CustomButton(
-                text: "Save Task",
-                onPressed: () {
-                  CustomDialog.show(
-                    context: context,
-                    title: "Success",
-                    message: 'The task has been updated successfully.',
-                    confirmText: "OK",
-                    onConfirm: () {},
-                  );
-                },
-              ),
-            ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                // টাস্ক টাইটেল ফিল্ড
+                CustomTextFromField(
+                  controller: controller.titleController, // 🌟 কন্ট্রোলার যুক্ত করা হলো
+                  label: "Task Title",
+                  hint: "e.g. Design Landing Page Header",
+                ),
+          
+                const SizedBox(height: 15),
+          
+                // ডেসক্রিপশন ফিল্ড
+                CustomTextFromField(
+                  controller: controller.descriptionController, // 🌟 কন্ট্রোলার যুক্ত করা হলো
+                  label: "Description",
+                  hint: "e.g. Include logo, navigation, and CTA button with brand color",
+                  maxLines: 3,
+                ),
+          
+                const SizedBox(height: 20),
+          
+                // সেভ বাটন (Obx দিয়ে লোডিং হ্যান্ডেল করা হয়েছে)
+                Obx(() => CustomButton(
+                  text:  "Save Task",
+                  isLoading: controller.isLoading.value,
+                  onPressed: () => controller.createTask(context),
+                )),
+              ],
+            ),
           ),
         ),
       ),

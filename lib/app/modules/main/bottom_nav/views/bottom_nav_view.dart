@@ -17,7 +17,9 @@ class BottomNavView extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final controller = Get.put(BottomNavController());
+    final controller = Get.isRegistered<BottomNavController>()
+        ? Get.find<BottomNavController>()
+        : Get.put(BottomNavController());
 
     return Scaffold(
       body: TabBarView(
@@ -36,22 +38,16 @@ class BottomNavView extends StatelessWidget {
         icons: const [Ionicons.home, Ionicons.add, Ionicons.person],
         tabSize: 50,
         tabBarHeight: 60,
-
         textStyle: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.bold,
           color: isDark ? Colors.white70 : Colors.black54,
         ),
-
         tabIconColor: isDark ? Colors.grey.shade400 : Colors.grey,
         tabIconSelectedColor: Colors.white,
         tabSelectedColor: AppColor.primaryColor,
-
         tabBarColor: theme.cardColor,
-
-        onTabItemSelected: (int value) {
-          controller.motionTabBarController.index = value;
-        },
+        onTabItemSelected: (int value) => controller.changeTab(value),
       ),
     );
   }

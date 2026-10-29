@@ -6,6 +6,9 @@ import 'package:task_masenger_app/app/core/constants/string/app_string.dart';
 import 'package:task_masenger_app/app/modules/profile/widgets/profile_card.dart';
 import 'package:task_masenger_app/app/routes/app_pages.dart';
 
+import '../../../common/widgets/common_widgets/custom_dialog.dart';
+import '../../../data/local/local_auth_storage.dart';
+
 class ProfileMenuList extends StatelessWidget {
   const ProfileMenuList({super.key});
 
@@ -18,22 +21,20 @@ class ProfileMenuList extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-
           ProfileCard(
             icon: Ionicons.personOutline,
             title: AppString.myProfile,
             onTap: () {
               Get.toNamed(Routes.MY_PROFILE);
-              },
+            },
           ),
           const SizedBox(height: 12),
           ProfileCard(
             icon: Ionicons.settingsOutline,
             title: AppString.accountSetting,
             onTap: () {
-              Get.toNamed(Routes.ACCOUNT_SETTINGS);            },
-
+              Get.toNamed(Routes.ACCOUNT_SETTINGS);
+            },
           ),
 
           const SizedBox(height: 20),
@@ -63,7 +64,6 @@ class ProfileMenuList extends StatelessWidget {
             title: AppString.helpSupport,
             onTap: () {
               Get.toNamed(Routes.HELP_CENTER);
-
             },
           ),
           const SizedBox(height: 12),
@@ -71,7 +71,18 @@ class ProfileMenuList extends StatelessWidget {
             icon: Ionicons.logOutOutline,
             title: AppString.logOut,
             onTap: () {
-              // Log out logic here
+              CustomDialog.show(
+                context: context,
+                title: 'LogOut',
+                dialogType: DialogType.warning,
+                message: 'Are you sure you want to logout your account?',
+                confirmText: 'Log Out',
+                onConfirm: () {
+                  LocalAuthStorage local = LocalAuthStorage();
+                  local.clearAuthData();
+                  Get.toNamed(Routes.LOGIN);
+                },
+              );
             },
           ),
           const SizedBox(height: 30),

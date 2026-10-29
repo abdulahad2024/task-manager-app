@@ -140,8 +140,7 @@ class RegisterView extends GetView<RegisterController> {
                           title: AppString.alreadyHaveAccount,
                           actionText: AppString.loginButton,
                           onTap: () {
-                            Get.toNamed(Routes.LOGIN);
-                          },
+                            Get.offNamed(Routes.LOGIN);                          },
                         ),
                         const SizedBox(height: 15),
 

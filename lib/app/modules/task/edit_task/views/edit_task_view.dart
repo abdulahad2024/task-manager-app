@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_button.dart';
-import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_dialog.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text_feild.dart';
 import 'package:task_masenger_app/app/core/constants/color/app_color.dart';
@@ -14,7 +12,10 @@ class EditTaskView extends GetView<EditTaskController> {
 
   @override
   Widget build(BuildContext context) {
+    // কন্ট্রোলার ইনিশিয়ালাইজ করা
+    final controller = Get.put(EditTaskController());
     final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -27,7 +28,7 @@ class EditTaskView extends GetView<EditTaskController> {
           padding: const EdgeInsets.only(left: 12),
           child: Center(
             child: Card(
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
               child: Material(
                 color: AppColor.softColor,
                 shape: const CircleBorder(
@@ -38,7 +39,7 @@ class EditTaskView extends GetView<EditTaskController> {
                   onTap: () {
                     Get.back();
                   },
-                  child: SizedBox(
+                  child: const SizedBox(
                     width: 42,
                     height: 42,
                     child: Icon(
@@ -52,54 +53,46 @@ class EditTaskView extends GetView<EditTaskController> {
             ),
           ),
         ),
-
         title: CustomText(
           text: 'Edit Task',
           fontSize: theme.textTheme.titleLarge?.fontSize,
           fontWeight: FontWeight.w500,
         ),
-
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              CustomTextFromField(
-                label: "Task Title",
-                hint: "e.g. Design Landing Page Header",
-                onChanged: (value) {
-                  print(value);
-                },
-              ),
-
-              SizedBox(height: 15),
-
-              CustomTextFromField(
-                label: "Description",
-                hint: "e.g. Include logo, navigation, and CTA button with brand color",
-                maxLines: 3,
-                onChanged: (value) {
-                  print(value);
-                },
-              ),
-
-              SizedBox(height: 20),
-
-              CustomButton(
-                text: "Update Task",
-                onPressed: () {
-                  CustomDialog.show(
-                    context: context,
-                    title: "Success",
-                    message: 'Your task has been added successfully.',
-                    confirmText: "OK",
-                    onConfirm: () {},
-                  );
-                },
-              ),
-            ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                // টাস্ক টাইটেল ফিল্ড (আগের ডাটা সহ)
+                CustomTextFromField(
+                  controller: controller.titleController,
+                  label: "Task Title",
+                  hint: "e.g. Design Landing Page Header",
+                ),
+          
+                const SizedBox(height: 15),
+          
+                // ডেসক্রিপশন ফিল্ড (আগের ডাটা সহ)
+                CustomTextFromField(
+                  controller: controller.descriptionController,
+                  label: "Description",
+                  hint: "e.g. Include logo, navigation, and CTA button with brand color",
+                  maxLines: 3,
+                ),
+          
+                const SizedBox(height: 20),
+          
+                // আপডেট বাটন (Obx দিয়ে লোডিং হ্যান্ডেল করা হয়েছে)
+                Obx(() => CustomButton(
+                  text:  "Update Task",
+                  isLoading: controller.isLoading.value,
+                  onPressed: ()=> controller.updateTask(context),
+                )),
+              ],
+            ),
           ),
         ),
       ),

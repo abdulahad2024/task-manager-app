@@ -6,6 +6,7 @@ import 'package:task_masenger_app/app/core/constants/color/app_color.dart';
 import 'package:task_masenger_app/app/core/constants/string/app_string.dart';
 import 'package:task_masenger_app/app/modules/task/widgets/common_app_bar.dart';
 import 'package:task_masenger_app/app/routes/app_pages.dart';
+import 'package:task_masenger_app/export.dart'; // AppConfig বা অন্যান্য এক্সপোর্ট ব্যবহারের জন্য
 
 import '../controllers/my_profile_controller.dart';
 
@@ -36,7 +37,8 @@ class MyProfileView extends GetView<MyProfileController> {
                   child: InkWell(
                     customBorder: const CircleBorder(),
                     onTap: () {
-                      Get.toNamed(Routes.EDIT_PROFILE);                    },
+                      Get.toNamed(Routes.EDIT_PROFILE);
+                    },
                     child: const SizedBox(
                       width: 42,
                       height: 42,
@@ -54,63 +56,91 @@ class MyProfileView extends GetView<MyProfileController> {
         ],
       ),
 
-      // ২. বডি সেকশন
-      body: SafeArea(
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.all(20.0),
-          children: [
-            const SizedBox(height: 10),
+      // Obx দিয়ে র‍্যাপ করা হয়েছে যাতে ডাইনামিক ডেটা আসার সাথে সাথে UI আপডেট হয়
+      body: Obx(() {
+        // যদি ডেটা লোড হতে থাকে তবে লোডার দেখাবে
+        if (controller.isLoading.value && controller.userData.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-            Center(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: AppColor.primaryColor.withValues(alpha: 0.2),
-                backgroundImage: const NetworkImage(
-                  'https://avatars.githubusercontent.com/u/158837112?v=4',
+        // কন্ট্রোলার থেকে রিয়েল ডেটাগুলো এক্সট্রাক্ট করা
+        final firstName = controller.userData['firstName'] ?? '';
+        final lastName = controller.userData['lastName'] ?? '';
+        final fullName = "$firstName $lastName".trim();
+        final email = controller.userData['email'] ?? '';
+        final address = controller.userData['address'] ?? 'No Address Added';
+        final profilePicPath = controller.userData['profilePicture'] ?? '';
+
+        // ফুল ইমেজ ইউআরএল তৈরি (যদি ব্যাকএন্ড থেকে রিলেটিভ পাথ আসে)
+        final fullImageUrl = profilePicPath.isNotEmpty
+            ? (profilePicPath.startsWith('http')
+            ? profilePicPath
+            : "${AppConfig.domain}$profilePicPath")
+            : '';
+
+        return SafeArea(
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(20.0),
+            children: [
+              const SizedBox(height: 10),
+
+              // ডাইনামিক প্রোফাইল পিকচার
+              Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundColor: AppColor.primaryColor.withValues(alpha: 0.2),
+                  backgroundImage: fullImageUrl.isNotEmpty
+                      ? NetworkImage(fullImageUrl) as ImageProvider
+                      : const AssetImage('assets/images/default_avatar.png'), // ফলব্যাক লোকাল ইমেজ (যদি থাকে)
+                  onBackgroundImageError: (exception, stackTrace) {
+                    // ইমেজ লোড ফেইল করলে হ্যান্ডেল করার জন্য
+                  },
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-            // ইউজারের নাম (টাইটেল)
-            const Center(
-              child: CustomText(
-                text: "Mojahid",
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              // ইউজারের নাম (টাইটেল)
+              Center(
+                child: CustomText(
+                  text: fullName.isNotEmpty ? fullName : "User",
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 30),
+              const SizedBox(height: 30),
 
-            _buildInfoCard(
-              theme: theme,
-              isDark: isDark,
-              icon: Ionicons.person,
-              text: "Mojahid Islam",
-            ),
-            const SizedBox(height: 12),
+              // ১. ফুল নেম ইনফো কার্ড
+              _buildInfoCard(
+                theme: theme,
+                isDark: isDark,
+                icon: Ionicons.person,
+                text: fullName.isNotEmpty ? fullName : "Not Provided",
+              ),
+              const SizedBox(height: 12),
 
-            _buildInfoCard(
-              theme: theme,
-              isDark: isDark,
-              icon: Ionicons.mail,
-              text: "Samaltman@gmail.com",
-            ),
-            const SizedBox(height: 12),
+              // ২. ইমেইল ইনফো কার্ড
+              _buildInfoCard(
+                theme: theme,
+                isDark: isDark,
+                icon: Ionicons.mail,
+                text: email.isNotEmpty ? email : "No Email",
+              ),
+              const SizedBox(height: 12),
 
-            _buildInfoCard(
-              theme: theme,
-              isDark: isDark,
-              icon: Ionicons.location,
-              text: "1234 Elm Street, Springfield, IL",
-            ),
-          ],
-        ),
-      ),
+              // ৩. এড্রেস ইনফো কার্ড
+              _buildInfoCard(
+                theme: theme,
+                isDark: isDark,
+                icon: Ionicons.location,
+                text: address,
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
-
 
   Widget _buildInfoCard({
     required ThemeData theme,

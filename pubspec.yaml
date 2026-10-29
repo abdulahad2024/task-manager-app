@@ -42,6 +42,7 @@ dependencies:
   ionicons:
   http: ^1.6.0
   get_storage: ^2.1.1
+  image_picker:
 
 
 

@@ -1,7 +1,7 @@
+import 'package:task_masenger_app/app/modules/authentication/login/controllers/login_controller.dart';
 import 'package:task_masenger_app/app/modules/authentication/widgets/ordivider.dart';
 import 'package:task_masenger_app/app/core/utils/validator/form_validator.dart';
 import 'package:task_masenger_app/export.dart';
-import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -22,7 +22,7 @@ class LoginView extends GetView<LoginController> {
                 ),
                 child: Center(
                   child: Form(
-                    key: controller.loginFormKey, // Form Key যুক্ত করা হলো
+                    key: controller.loginFormKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -43,7 +43,6 @@ class LoginView extends GetView<LoginController> {
 
                         const SizedBox(height: 32),
 
-                        // Email Field
                         CustomTextFromField(
                           controller: controller.emailController,
                           label: AppString.emailAddress,
@@ -54,7 +53,6 @@ class LoginView extends GetView<LoginController> {
 
                         const SizedBox(height: 15),
 
-                        // Password Field
                         Obx(
                               () => CustomTextFromField(
                             controller: controller.passwordController,
@@ -68,7 +66,6 @@ class LoginView extends GetView<LoginController> {
 
                         const SizedBox(height: 12),
 
-                        // Remember Me Checkbox (আপনার রিকোয়েস্ট অনুযায়ী ডাইনামিক করা হয়েছে)
                         Obx(
                               () => CustomCheckbox(
                             activeColor: AppColor.primaryColor,
@@ -82,31 +79,30 @@ class LoginView extends GetView<LoginController> {
 
                         const SizedBox(height: 20),
 
-                        const OrDivider(
-                          text: AppString.or,
-                        ),
-
-                        const SizedBox(height: 15),
-
-                        // Don't have an account? Sign Up
-                        AuthActionText(
-                          title: AppString.dontHaveAccount,
-                          actionText: AppString.signupButton,
-                          onTap: () {
-                            Get.toNamed(Routes.REGISTER);
-                          },
-                        ),
-                        const SizedBox(height: 15),
-
-                        // Login Button with Loading State
                         Obx(
-                              () =>CustomButton(
+                              () => CustomButton(
                             text: AppString.loginButton,
                             isLoading: controller.isLoading.value,
                             onPressed: () {
                               controller.loginUser(context);
                             },
                           ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        const OrDivider(
+                          text: AppString.or,
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        AuthActionText(
+                          title: AppString.dontHaveAccount,
+                          actionText: AppString.signupButton,
+                          onTap: () {
+                            Get.toNamed(Routes.REGISTER);
+                          },
                         ),
 
                         const SizedBox(height: 20),

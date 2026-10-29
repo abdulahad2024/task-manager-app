@@ -1,13 +1,12 @@
 class FormValidator {
 
-
   // First Name / Last Name Validation
   static String? validateName(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName enter korun';
+      return 'Please enter your $fieldName';
     }
     if (value.trim().length < 2) {
-      return '$fieldName minimum 2 character hote hobe';
+      return '$fieldName must be at least 2 characters long';
     }
     return null;
   }
@@ -15,11 +14,11 @@ class FormValidator {
   // Email Validation
   static String? validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Email address enter korun';
+      return 'Please enter your email address';
     }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value.trim())) {
-      return 'Sothik email address enter korun';
+      return 'Please enter a valid email address';
     }
     return null;
   }
@@ -27,7 +26,7 @@ class FormValidator {
   // Address Validation
   static String? validateAddress(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Address enter korun';
+      return 'Please enter your address';
     }
     return null;
   }
@@ -35,21 +34,21 @@ class FormValidator {
   // Password Validation
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Password enter korun';
+      return 'Please enter your password';
     }
     if (value.length < 6) {
-      return 'Password minimum 6 character hote hobe';
+      return 'Password must be at least 6 characters long';
     }
     return null;
   }
 
-  // Confirm Password Validation (পাসওয়ার্ড মিলছে কি না চেক করার জন্য)
+  // Confirm Password Validation
   static String? validateConfirmPassword(String? value, String password) {
     if (value == null || value.isEmpty) {
-      return 'Confirm password enter korun';
+      return 'Please confirm your password';
     }
     if (value != password) {
-      return 'Password and Confirm Password mile nai';
+      return 'Passwords do not match';
     }
     return null;
   }

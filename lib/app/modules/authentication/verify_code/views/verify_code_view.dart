@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_button.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_otp_field.dart';
 import 'package:task_masenger_app/app/common/widgets/common_widgets/custom_text.dart';
+import 'package:task_masenger_app/app/core/constants/color/app_color.dart';
 import 'package:task_masenger_app/app/core/constants/string/app_string.dart';
 
 import '../controllers/verify_code_controller.dart';
@@ -50,7 +51,7 @@ class VerifyCodeView extends GetView<VerifyCodeController> {
                         text: controller.email.isNotEmpty
                             ? controller.email
                             : "email@example.com",
-                        color: theme.primaryColor,
+                        color: AppColor.primaryColor,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),

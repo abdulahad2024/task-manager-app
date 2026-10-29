@@ -1,9 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- ইন্টারনেট পারমিশন -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- ক্যামেরা দিয়ে ছবি তোলার জন্য -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- গ্যালারি বা স্টোরেজ থেকে ছবি সিলেক্ট করার জন্য (Android 12 বা তার নিচের ভার্সনের জন্য) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+
+    <!-- গ্যালারি থেকে ছবি সিলেক্ট করার জন্য (Android 13 বা তার পরবর্তী লেটেস্ট ভার্সনের জন্য) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
-        android:label="task_masenger_app"
+        android:label="Task Manager"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

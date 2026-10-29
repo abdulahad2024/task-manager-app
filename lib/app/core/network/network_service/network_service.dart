@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart'; // kDebugMode ব্যবহার করার জন্য
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:task_masenger_app/app/core/constants/api/api_endpoints.dart';
 
 class NetworkService {
@@ -126,6 +127,7 @@ class NetworkService {
   }
 
   // 6. MULTIPART Method
+  // 6. MULTIPART Method
   Future<dynamic> multipart({
     required String endpoint,
     required Map<String, String> fields,
@@ -135,7 +137,7 @@ class NetworkService {
   }) async {
     final url = '${ApiEndpoints.baseUrl}$endpoint';
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(url));
+      var request = http.MultipartRequest('PATCH', Uri.parse(url));
 
       request.headers.addAll({
         'Accept': 'application/json',
@@ -146,12 +148,25 @@ class NetworkService {
 
       var stream = http.ByteStream(imageFile.openRead());
       var length = await imageFile.length();
+
+      // --- Ekhane contentType add kora holo ---
+      String mimeType = 'image/jpeg'; // Default fallback
+      if (imageFile.path.endsWith('.png')) {
+        mimeType = 'image/png';
+      } else if (imageFile.path.endsWith('.jpg') || imageFile.path.endsWith('.jpeg')) {
+        mimeType = 'image/jpeg';
+      }
+
+      var mimeSplit = mimeType.split('/');
+
       var multipartFile = http.MultipartFile(
         imageFieldKey,
         stream,
         length,
         filename: imageFile.path.split('/').last,
+        contentType: MediaType(mimeSplit[0], mimeSplit[1]), // Back-end ke image bole identify koranor jonno
       );
+
       request.files.add(multipartFile);
 
       var streamedResponse = await request.send();
@@ -175,7 +190,6 @@ class NetworkService {
       rethrow;
     }
   }
-
   // Response Handler & Error Catcher
   dynamic _processResponse(http.Response response) {
     try {
